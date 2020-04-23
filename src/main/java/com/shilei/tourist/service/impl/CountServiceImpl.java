@@ -1,0 +1,521 @@
+package com.shilei.tourist.service.impl;
+
+import com.shilei.tourist.dao.*;
+import com.shilei.tourist.entity.Address;
+import com.shilei.tourist.entity.EveryDayAvg;
+import com.shilei.tourist.entity.PersonNumber;
+import com.shilei.tourist.service.CountService;
+import com.shilei.tourist.utils.Camera;
+import com.shilei.tourist.utils.HolidayUtil;
+import com.shilei.tourist.vo.*;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.Validate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.shilei.tourist.utils.Sample.body_num;
+
+@Component
+@Slf4j
+public class CountServiceImpl implements CountService {
+    @Autowired
+    NumberDao numberDao;
+
+    @Autowired
+    AddressDao addressDao;
+
+    @Autowired
+    EveryDayAvgDao everyDayAvgDao;
+
+    @Autowired
+    EveryDayMaxDao everyDayMaxDao;
+
+    @Autowired
+    StaffDao staffDao;
+
+
+    @Override
+    public PersonCountVO personCount() throws InterruptedException {
+        Camera camera = new Camera();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        camera.main();
+        log.info("通过摄像头获取当前的人数为{}",body_num());
+        Integer personNumbers = body_num();
+        PersonCountVO personCountVO = new PersonCountVO();
+        personCountVO.setNowTime(simpleDateFormat.format(new Date()));
+        personCountVO.setPersonNumber(personNumbers);
+        personCountVO.setPlaceName("测试");
+        return personCountVO;
+    }
+
+    @Override
+    public void savePersonNumber() throws InterruptedException {
+        Integer personNumbers = body_num();
+        Camera camera = new Camera();
+        camera.main();
+        PersonNumber personNumber = new PersonNumber();
+        personNumber.setAddress("测试1");
+        personNumber.setNumber(personNumbers);
+        personNumber.setNowTime(new Date());
+        log.info("存储的人数和时间关系数据为{ }",personNumber);
+        numberDao.save(personNumber);
+    }
+
+    @Override
+    public void saveAvgToday() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        List<Address> addressList = addressDao.findAll();
+        List<String> addressNameList = addressList.stream().map(e -> e.getName()).collect(Collectors.toList());
+        for (String address: addressNameList) {
+            EveryDayAvg todayAvg = numberDao.findAllByDateAndAddress(simpleDateFormat.format(date),address);
+            everyDayAvgDao.save(todayAvg);
+        }
+    }
+
+    @Override
+    public List<TomorrowNumberVO> tomorrowNumber() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String today = simpleDateFormat.format(date);
+        List<TomorrowNumberVO> tomorrowNumberVOList = new ArrayList<>();
+        List<Address> addressList = addressDao.findAll();
+        List<String> addressNameList = addressList.stream().map(e -> e.getName()).collect(Collectors.toList());
+        SimpleDateFormat day = new SimpleDateFormat("yyyyMMdd");
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(calendar.DATE,1);//把日期往后增加一天.整数往后推,负数往前移动
+        date = calendar.getTime();
+        String holiday = HolidayUtil.Get(day.format(date));
+        for (String address:addressNameList) {
+            TomorrowNumberVO tomorrowNumberVO = new TomorrowNumberVO();
+            List<PersonNumber> personNumberList = numberDao.findAllByAddressAndDate(address,today);
+            log.info("查找到的personNumberList为{}",personNumberList);
+            if (!personNumberList.isEmpty()){
+                PersonNumber personNumber = personNumberList.stream().max(Comparator.comparingInt(e ->e.getNumber())).get();
+
+                tomorrowNumberVO.setAddress(personNumber.getAddress());
+                tomorrowNumberVO.setDate(personNumber.getDate());
+                tomorrowNumberVO.setTodayMost(personNumber.getNumber());
+
+                int todayTotal = personNumberList.stream().mapToInt(e -> e.getNumber()).sum() / personNumberList.size();
+                tomorrowNumberVO.setTodayTotal(todayTotal);
+                List<PersonNumber> numberList = numberDao.findAllByAddressAndDateOrderByNowTimeDesc(address,today);
+                tomorrowNumberVO.setNowNumber(numberList.get(0).getNumber());
+                tomorrowNumberVO.setTag(holiday);
+                if(holiday.equals("节日")){
+                    tomorrowNumberVO.setTomorrowMost(personNumber.getNumber()*3);
+                    tomorrowNumberVO.setTomorrowTotal(todayTotal*3);
+                }else if(holiday.equals("假日")){
+                    tomorrowNumberVO.setTomorrowMost(personNumber.getNumber()*2);
+                    tomorrowNumberVO.setTomorrowTotal(todayTotal*2);
+                }else {
+                    tomorrowNumberVO.setTomorrowMost(personNumber.getNumber());
+                    tomorrowNumberVO.setTomorrowTotal(todayTotal);
+                }
+                tomorrowNumberVOList.add(tomorrowNumberVO);
+            }
+        }
+
+
+        return tomorrowNumberVOList;
+    }
+
+    @Override
+    public List<TodayCountVO> todayPersonNumber(TodayCountDTO todayCountDTO) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = null;
+        if (null == todayCountDTO.getDate() || todayCountDTO.getDate().equals(null) || todayCountDTO.getDate().isEmpty()){
+            Date today = new Date();
+            todayCountDTO.setDate(simpleDateFormat.format(today));
+        }else{
+            String TimeStart = todayCountDTO.getDate().replace("Z", " UTC");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+            Date callbackTimeStart = format.parse(TimeStart);    //Fri Dec 28 00:00:00 GMT+08:00 2018
+            date = simpleDateFormat.format(callbackTimeStart);
+            todayCountDTO.setDate(date);
+        }
+
+        List<TodayCountVO> series = new ArrayList<>();
+
+        TodayCountVO todayCountVO_Max = new TodayCountVO();
+        List<String> avgList = numberDao.findAvgByDateAndAddress(todayCountDTO.getDate(),todayCountDTO.getAddress());
+        todayCountVO_Max.setName("小时平均");
+        todayCountVO_Max.setType("line");
+        todayCountVO_Max.setData(avgList);
+        series.add(todayCountVO_Max);
+
+        TodayCountVO todayCountVO_Avg = new TodayCountVO();
+        List<String> maxList = numberDao.findMaxByDateAndAddress(todayCountDTO.getDate(),todayCountDTO.getAddress());
+        todayCountVO_Avg.setName("小时最高");
+        todayCountVO_Avg.setType("line");
+        todayCountVO_Avg.setData(maxList);
+        series.add(todayCountVO_Avg);
+
+        log.info("当日分时统计数据为{}",series);
+        return series;
+    }
+
+    @Override
+    public List<MoreDayCountVO> moreDayCount(MoreDayCountDTO moreDayCountDTO) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (null == moreDayCountDTO.getEndDate()  || null == moreDayCountDTO.getEndDate()){
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 7);
+            Date sevenDayAgo = calendar.getTime();
+            moreDayCountDTO.setStartDate(simpleDateFormat.format(sevenDayAgo));
+            moreDayCountDTO.setEndDate(simpleDateFormat.format(date));
+        }else{
+            String TimeStart = moreDayCountDTO.getStartDate().replace("Z", " UTC");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+            Date callbackTimeStart = format.parse(TimeStart);    //Fri Dec 28 00:00:00 GMT+08:00 2018
+            String startDate  = simpleDateFormat.format(callbackTimeStart);
+            moreDayCountDTO.setStartDate(startDate);
+            String TimeEnd = moreDayCountDTO.getEndDate().replace("Z", " UTC");
+            Date callbackTimeEnd = format.parse(TimeEnd);    //Fri Dec 28 00:00:00 GMT+08:00 2018
+            String endDate  = simpleDateFormat.format(callbackTimeEnd);
+            moreDayCountDTO.setEndDate(endDate);
+        }
+
+
+        List<MoreDayCountVO> series = new ArrayList<>();
+
+        MoreDayCountVO moreDayCountVO_Max = new MoreDayCountVO();
+        List<String> moreDayMax = everyDayMaxDao.findEveryDayMaxByDateAndAddress(moreDayCountDTO.getStartDate(),moreDayCountDTO.getEndDate(),moreDayCountDTO.getAddress());
+        moreDayCountVO_Max.setName("当日最高");
+        moreDayCountVO_Max.setType("line");
+        moreDayCountVO_Max.setData(moreDayMax);
+        series.add(moreDayCountVO_Max);
+
+        MoreDayCountVO moreDayCountVO_Avg = new MoreDayCountVO();
+        List<String> moreDayAvg = everyDayAvgDao.findEveryDayAvgByDateAndAddress(moreDayCountDTO.getStartDate(),moreDayCountDTO.getEndDate(),moreDayCountDTO.getAddress());
+        moreDayCountVO_Avg.setName("当日平均");
+        moreDayCountVO_Avg.setType("line");
+        moreDayCountVO_Avg.setData(moreDayAvg);
+        series.add(moreDayCountVO_Avg);
+        log.info("查询到的多日数据为{}",series);
+        return series;
+    }
+
+    @Override
+    public List<String> getDate(MoreDayCountDTO moreDayCountDTO) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (null == moreDayCountDTO.getEndDate() || null == moreDayCountDTO.getEndDate()) {
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 7);
+            Date sevenDayAgo = calendar.getTime();
+            moreDayCountDTO.setStartDate(simpleDateFormat.format(sevenDayAgo));
+            moreDayCountDTO.setEndDate(simpleDateFormat.format(date));
+        } else {
+            String TimeStart = moreDayCountDTO.getStartDate().replace("Z", " UTC");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+            Date callbackTimeStart = format.parse(TimeStart);    //Fri Dec 28 00:00:00 GMT+08:00 2018
+            String startDate = simpleDateFormat.format(callbackTimeStart);
+            moreDayCountDTO.setStartDate(startDate);
+            String TimeEnd = moreDayCountDTO.getEndDate().replace("Z", " UTC");
+            Date callbackTimeEnd = format.parse(TimeEnd);    //Fri Dec 28 00:00:00 GMT+08:00 2018
+            String endDate = simpleDateFormat.format(callbackTimeEnd);
+            moreDayCountDTO.setEndDate(endDate);
+        }
+
+        List<String> list = new ArrayList<>();
+        Calendar startDay = Calendar.getInstance();
+        Calendar endDay = Calendar.getInstance();
+        startDay.setTime(simpleDateFormat.parse(moreDayCountDTO.getStartDate()));
+        endDay.setTime(simpleDateFormat.parse(moreDayCountDTO.getEndDate()));
+        // 给出的日期开始日比终了日大则不执行打印
+        String s1 = moreDayCountDTO.getStartDate();
+        list.add(s1);
+        if (!moreDayCountDTO.getStartDate().equals(moreDayCountDTO.getEndDate())) {
+            if (startDay.compareTo(endDay) <= 0) {
+                //现在打印中的日期
+                Calendar currentPrintDay = startDay;
+                while (true) {
+                    // 日期加一
+                    currentPrintDay.add(Calendar.DATE, 1);
+                    // 日期加一后判断是否达到终了日，达到则终止打印
+                    if (currentPrintDay.compareTo(endDay) == 0) {
+                        break;
+                    }
+                    String s = simpleDateFormat.format(currentPrintDay.getTime());
+                    list.add(s);
+                }
+                String s2 = moreDayCountDTO.getEndDate();
+                list.add(s2);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<NumberWarningVO> getNumberWarning() throws Exception {
+        List<NumberWarningVO> list =  castEntity(staffDao.getWarningNumber(),NumberWarningVO.class);
+        log.info("多表查询返回的预警设置表为{}",list);
+        return list;
+    }
+
+    @Override
+    public List<Map<String,String>> getYear() {
+        List<Map<String,String>> list = new ArrayList<>();
+        Calendar date = Calendar.getInstance();
+        int year = date.get(Calendar.YEAR);
+        Map<String,String> map = new HashMap<>();
+        map.put("value","选项1");
+        map.put("label", String.valueOf(year));
+        list.add(map);
+        Map<String,String> map2 = new HashMap<>();
+        map2.put("value","选项2");
+        map2.put("label", String.valueOf(year-1));
+        list.add(map2);
+        Map<String,String> map3 = new HashMap<>();
+        map3.put("value","选项3");
+        map3.put("label", String.valueOf(year-2));
+        list.add(map3);
+        return list;
+    }
+
+    @Override
+    public List<Map<String,String>> getMonth(int year) {
+        List<Map<String,String>> list = new ArrayList<>();
+        Calendar date = Calendar.getInstance();
+        if(year == date.get(Calendar.YEAR)){
+            int month = date.get(Calendar.MONTH)+1;
+            for (int i = 1; i <= month; i++) {
+                Map<String,String> map = new HashMap<>();
+                map.put("value","选项"+i);
+                map.put("label", String.valueOf(i));
+                list.add(map);
+            }
+        }else{
+            for (int i = 1; i <= 12; i++) {
+                Map<String,String> map = new HashMap<>();
+                map.put("value","选项"+i);
+                map.put("label", String.valueOf(i));
+                list.add(map);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<MoreDayCountVO> monthCount(MonthCountDTO monthCountDTO) {
+        MoreDayCountDTO moreDayCountDTO = new MoreDayCountDTO();
+        moreDayCountDTO.setStartDate(getFirstDayOfMonth(monthCountDTO.getYear(),monthCountDTO.getMonth()));
+        moreDayCountDTO.setEndDate(getLastDayOfMonth(monthCountDTO.getYear(),monthCountDTO.getMonth()));
+        moreDayCountDTO.setAddress(monthCountDTO.getAddress());
+
+        List<MoreDayCountVO> series = new ArrayList<>();
+
+        MoreDayCountVO moreDayCountVO_Max = new MoreDayCountVO();
+        List<String> moreDayMax = everyDayMaxDao.findEveryDayMaxByDateAndAddress(moreDayCountDTO.getStartDate(),moreDayCountDTO.getEndDate(),moreDayCountDTO.getAddress());
+        moreDayCountVO_Max.setName("当日最高");
+        moreDayCountVO_Max.setType("line");
+        moreDayCountVO_Max.setData(moreDayMax);
+        series.add(moreDayCountVO_Max);
+
+        MoreDayCountVO moreDayCountVO_Avg = new MoreDayCountVO();
+        List<String> moreDayAvg = everyDayAvgDao.findEveryDayAvgByDateAndAddress(moreDayCountDTO.getStartDate(),moreDayCountDTO.getEndDate(),moreDayCountDTO.getAddress());
+        moreDayCountVO_Avg.setName("当日平均");
+        moreDayCountVO_Avg.setType("line");
+        moreDayCountVO_Avg.setData(moreDayAvg);
+        series.add(moreDayCountVO_Avg);
+        log.info("查询到的多日数据为{}",series);
+        return series;
+
+    }
+
+    @Override
+    public List<MoreDayCountVO> weekCount(TodayCountDTO todayCountDTO) throws ParseException {
+        String startDate = getAllDate(todayCountDTO).get(0);
+        String endDate = getAllDate(todayCountDTO).get(getAllDate(todayCountDTO).size() - 1);
+
+        List<MoreDayCountVO> series = new ArrayList<>();
+
+        MoreDayCountVO moreDayCountVO_Max = new MoreDayCountVO();
+        List<String> moreDayMax = everyDayMaxDao.findEveryDayMaxByDateAndAddress(startDate,endDate,todayCountDTO.getAddress());
+        moreDayCountVO_Max.setName("当日最高");
+        moreDayCountVO_Max.setType("line");
+        moreDayCountVO_Max.setData(moreDayMax);
+        series.add(moreDayCountVO_Max);
+
+        MoreDayCountVO moreDayCountVO_Avg = new MoreDayCountVO();
+        List<String> moreDayAvg = everyDayAvgDao.findEveryDayAvgByDateAndAddress(startDate,endDate,todayCountDTO.getAddress());
+        moreDayCountVO_Avg.setName("当日平均");
+        moreDayCountVO_Avg.setType("line");
+        moreDayCountVO_Avg.setData(moreDayAvg);
+        series.add(moreDayCountVO_Avg);
+        log.info("查询到的多日数据为{}",series);
+        return series;
+
+    }
+
+    @Override
+    public List<String> getAllDate(TodayCountDTO todayCountDTO) throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (todayCountDTO.getDate().isEmpty()){
+            Date date = new Date();
+            cal.setTime(sdf.parse(sdf.format(date)));
+        }else{
+            cal.setTime(sdf.parse(todayCountDTO.getDate()));
+        }
+        // 设置一个星期的第一天，按中国的习惯一个星期的第一天是星期一
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
+        // 判断要计算的日期是否是周日，如果是则减一天计算周六的，否则会出问题，计算到下一周去了
+        int dayWeek = cal.get(Calendar.DAY_OF_WEEK);// 获得当前日期是一个星期的第几天
+        if (1 == dayWeek) {
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+        }
+        // 获得当前日期是一个星期的第几天
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+        // 获取该周第一天
+        cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - day - 1);
+        String startDate = sdf.format(cal.getTime());
+        // 获取该周最后一天
+        cal.add(Calendar.DATE, 7);
+        String endDate = sdf.format(cal.getTime());
+
+        MoreDayCountDTO moreDayCountDTO = new MoreDayCountDTO();
+        moreDayCountDTO.setStartDate(startDate);
+        moreDayCountDTO.setEndDate(endDate);
+        moreDayCountDTO.setAddress(todayCountDTO.getAddress());
+
+        List<String> list = new ArrayList<>();
+        Calendar startDay = Calendar.getInstance();
+        Calendar endDay = Calendar.getInstance();
+        startDay.setTime(sdf.parse(moreDayCountDTO.getStartDate()));
+        endDay.setTime(sdf.parse(moreDayCountDTO.getEndDate()));
+        if (!moreDayCountDTO.getStartDate().equals(moreDayCountDTO.getEndDate())) {
+            if (startDate.compareTo(endDate) <= 0) {
+                //现在打印中的日期
+                Calendar currentPrintDay = startDay;
+                while (true) {
+                    // 日期加一
+                    currentPrintDay.add(Calendar.DATE, 1);
+                    // 日期加一后判断是否达到终了日，达到则终止打印
+                    if (currentPrintDay.compareTo(endDay) == 0) {
+                        break;
+                    }
+                    String s = sdf.format(currentPrintDay.getTime());
+                    list.add(s);
+                }
+                String s2 = moreDayCountDTO.getEndDate();
+                list.add(s2);
+            }
+        }
+        return list;
+    }
+
+
+    public static List<String> getDayList(MoreDayCountDTO moreDayCountDTO) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        List<String> list = new ArrayList<>();
+        Calendar startDay = Calendar.getInstance();
+        Calendar endDay = Calendar.getInstance();
+        startDay.setTime(simpleDateFormat.parse(moreDayCountDTO.getStartDate()));
+        endDay.setTime(simpleDateFormat.parse(moreDayCountDTO.getEndDate()));
+        if (!moreDayCountDTO.getStartDate().equals(moreDayCountDTO.getEndDate())) {
+            if (moreDayCountDTO.getStartDate().compareTo(moreDayCountDTO.getEndDate()) <= 0) {
+                //现在打印中的日期
+                Calendar currentPrintDay = startDay;
+                while (true) {
+                    // 日期加一
+                    currentPrintDay.add(Calendar.DATE, 1);
+                    // 日期加一后判断是否达到终了日，达到则终止打印
+                    if (currentPrintDay.compareTo(endDay) == 0) {
+                        break;
+                    }
+                    String s = simpleDateFormat.format(currentPrintDay.getTime());
+                    list.add(s);
+                }
+                String s2 = moreDayCountDTO.getEndDate();
+                list.add(s2);
+            }
+        }
+        return list;
+
+    }
+
+    //转换实体类
+    public static <T> List<T> castEntity(List<Object[]> list, Class<T> clazz) throws Exception {
+        List<T> returnList = new ArrayList<>();
+        if(CollectionUtils.isEmpty(list)){
+            return returnList;
+        }
+        List<Class<?>> allFieldsList = getAllFieldsList(NumberWarningVO.class);
+        Class[] mod = allFieldsList.toArray(new Class[list.get(0).length]);
+        for (Object[] co : list) {
+            Constructor<T> constructor = clazz.getConstructor(mod);
+            returnList.add(constructor.newInstance(co));
+        }
+        return returnList;
+    }
+    //通过反射获取实体类的每个字段类型
+    public static List<Class<?>> getAllFieldsList(final Class<?> cls) {
+        Validate.isTrue(cls != null, "The class must not be null");
+        final List<Class<?>> allFields = new ArrayList<>();
+        Class<?> currentClass = cls;
+        while (currentClass != null) {
+            final Field[] declaredFields = currentClass.getDeclaredFields();
+            for (final Field field : declaredFields) {
+                allFields.add(field.getType());
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+        return allFields;
+    }
+
+
+    /**
+     * 获取指定年月的第一天
+     * @param year
+     * @param month
+     * @return
+     */
+    public static String getFirstDayOfMonth(int year, int month) {
+        Calendar cal = Calendar.getInstance();
+        //设置年份
+        cal.set(Calendar.YEAR, year);
+        //设置月份
+        cal.set(Calendar.MONTH, month-1);
+        //获取某月最小天数
+        int firstDay = cal.getMinimum(Calendar.DATE);
+        //设置日历中月份的最小天数
+        cal.set(Calendar.DAY_OF_MONTH,firstDay);
+        //格式化日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(cal.getTime());
+    }
+
+    /**
+     * 获取指定年月的最后一天
+     * @param year
+     * @param month
+     * @return
+     */
+    public static String getLastDayOfMonth(int year, int month) {
+        Calendar cal = Calendar.getInstance();
+        //设置年份
+        cal.set(Calendar.YEAR, year);
+        //设置月份
+        cal.set(Calendar.MONTH, month-1);
+        //获取某月最大天数
+        int lastDay = cal.getActualMaximum(Calendar.DATE);
+        //设置日历中月份的最大天数
+        cal.set(Calendar.DAY_OF_MONTH, lastDay);
+        //格式化日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(cal.getTime());
+    }
+
+}
