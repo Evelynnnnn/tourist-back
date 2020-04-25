@@ -12,6 +12,9 @@ import java.util.List;
 @Component
 @Repository
 public interface NumberDao extends JpaRepository<PersonNumber,Integer> {
+    @Query(nativeQuery = true,value = "select p.number from person_number p where p.address =:address order by p.time DESC limit 1")
+    String findNumberByAddress(String address);
+
     @Query(nativeQuery = true,value = "select cast(AVG(p.number) as decimal(10,2)) as number from person_number p where p.date = :date and p.address = :address")
     EveryDayAvg findAllByDateAndAddress(String date, String address);
 

@@ -1,6 +1,7 @@
 package com.shilei.tourist.controller;
 
 import com.shilei.tourist.dao.EveryDayAvgDao;
+import com.shilei.tourist.dao.NumberDao;
 import com.shilei.tourist.service.AddressService;
 import com.shilei.tourist.service.CountService;
 import com.shilei.tourist.vo.*;
@@ -21,6 +22,10 @@ import static com.shilei.tourist.service.impl.CountServiceImpl.*;
 @RestController
 @RequestMapping("/count")
 public class CountController {
+
+    @Autowired
+    NumberDao numberDao;
+
     @Autowired
     CountService countService;
 
@@ -100,6 +105,11 @@ public class CountController {
     @PostMapping("/weekCount")
     public List<MoreDayCountVO> getWeekCount(@RequestBody TodayCountDTO todayCountDTO) throws ParseException {
         return countService.weekCount(todayCountDTO);
+    }
+
+    @GetMapping("/personNumber")
+    public String getPersonNumber(@RequestParam String address){
+        return numberDao.findNumberByAddress(address);
     }
 //    @GetMapping(value = "/info")
 //    public JSONArray getImgInfo() {
