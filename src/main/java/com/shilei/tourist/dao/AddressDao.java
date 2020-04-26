@@ -14,5 +14,4 @@ public interface AddressDao extends JpaRepository<Address,Integer> {
 
     @Query(nativeQuery = true,value = "select a.name from address a")
     List<String> findAllAddressName();
-
 }

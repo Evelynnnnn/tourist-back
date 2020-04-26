@@ -446,6 +446,28 @@ public class CountServiceImpl implements CountService {
 
     }
 
+
+    @Override
+    public List<HomeInfoGetVO> getHomeInfo(String address) {
+        List<HomeInfoGetVO> list = new ArrayList<>();
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String avg = everyDayAvgDao.findAvgNumberByDateAndAddress(address,simpleDateFormat.format(date));
+        String max = everyDayMaxDao.findMaxNumberByDateAndAddress(address,simpleDateFormat.format(date));
+        String min = numberDao.findMinNumberByDateAndAddress(address,simpleDateFormat.format(date));
+        String now = numberDao.findNumberByAddressAndDate(address,simpleDateFormat.format(date));
+        String name = staffDao.findStaffByAddress(address);
+        HomeInfoGetVO homeInfoGetVO = new HomeInfoGetVO();
+        homeInfoGetVO.setAvg(avg == null ? 0 : Integer.parseInt(avg));
+        homeInfoGetVO.setMax(max == null ? 0 : Integer.parseInt(max));
+        homeInfoGetVO.setMin(min == null ? 0 : Integer.parseInt(min));
+        homeInfoGetVO.setNow(now == null ? 0 : Integer.parseInt(now));
+        homeInfoGetVO.setStaff(name);
+        log.info("首页查询到的homeInfoVO为{}",homeInfoGetVO);
+        list.add(homeInfoGetVO);
+        return list;
+    }
+
     //转换实体类
     public static <T> List<T> castEntity(List<Object[]> list, Class<T> clazz) throws Exception {
         List<T> returnList = new ArrayList<>();

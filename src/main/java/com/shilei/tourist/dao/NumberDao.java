@@ -92,4 +92,11 @@ public interface NumberDao extends JpaRepository<PersonNumber,Integer> {
 
     @Query(nativeQuery = true,value = "select p.date from person_number p where p.date >= :startDate and p.date <= :endDate")
     List<String> findAllDateByDate(String startDate, String endDate);
+
+    @Query(nativeQuery = true,value = "select MIN(p.number) as min from person_number p where p.date = :date and p.address = :address limit 1")
+    String findMinNumberByDateAndAddress(String date, String address);
+
+    @Query(nativeQuery = true,value = "select p.number from person_number p where p.address =:address and p.date = :date order by p.time DESC limit 1")
+    String findNumberByAddressAndDate(String address,String date);
+
 }

@@ -48,4 +48,6 @@ public interface CountService {
     List<MoreDayCountVO> weekCount(TodayCountDTO todayCountDTO) throws ParseException;
 
     List<String> getAllDate(TodayCountDTO todayCountDTO) throws ParseException;
+
+    List<HomeInfoGetVO> getHomeInfo(String address);
 }

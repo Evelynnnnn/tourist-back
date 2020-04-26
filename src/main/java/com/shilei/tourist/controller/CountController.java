@@ -111,6 +111,11 @@ public class CountController {
     public String getPersonNumber(@RequestParam String address){
         return numberDao.findNumberByAddress(address);
     }
+
+    @PostMapping("/homeGetInfo")
+    public List<HomeInfoGetVO> getHomeInfo(@RequestBody Map<String,String> map){
+        return countService.getHomeInfo(map.get("address"));
+    }
 //    @GetMapping(value = "/info")
 //    public JSONArray getImgInfo() {
 //        return addressService.getImageInfo();

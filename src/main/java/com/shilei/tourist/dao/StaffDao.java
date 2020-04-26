@@ -17,4 +17,6 @@ public interface StaffDao extends JpaRepository<Staff,Integer> {
     @Query(nativeQuery = true,value = "select staff.duty_address,address.person_num,staff.name,staff.job,address.warning_number from staff, address where staff.duty_address = address.name")
     public List<Object[]> getWarningNumber();
 
+    @Query(nativeQuery = true,value = "select name from staff where staff.duty_address = :address and staff.state = '在职'")
+    String findStaffByAddress(String address);
 }
