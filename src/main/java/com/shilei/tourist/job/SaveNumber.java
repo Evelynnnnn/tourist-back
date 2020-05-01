@@ -12,12 +12,10 @@ public class SaveNumber {
     @Autowired
     CountService countService;
 
-
-//
-//    @Scheduled(cron = "0 0/2 8-20 * * ?")
-//    void savePersonNumber() throws InterruptedException {
-//        countService.savePersonNumber();
-//    }
+    @Scheduled(cron = "0 0/2 8-20 * * ?")
+    void savePersonNumber() throws InterruptedException {
+        countService.savePersonNumber();
+    }
 
     @Scheduled(cron = "0 0 18 * * ?")
     void saveAvgEveryDay(){

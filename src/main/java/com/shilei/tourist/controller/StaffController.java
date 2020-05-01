@@ -29,8 +29,13 @@ public class StaffController {
     }
 
     @PostMapping("/sendEmail")
-    public void sendEmail(@RequestBody Map<String,String> map){
+    public void sendEmail(@RequestBody Map<String,Object> map){
         staffService.sendEmail(map);
+    }
+
+    @GetMapping("/sendAllEmail")
+    public void sendAllEmail(@RequestParam String text){
+        staffService.sendAllEmail(text);
     }
 
     @PostMapping("/addStaff")

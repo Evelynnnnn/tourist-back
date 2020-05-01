@@ -9,7 +9,7 @@ import java.security.GeneralSecurityException;
 import java.util.Properties;
 
 public class SendMail {
-    public static void sendEmail(String text) throws MessagingException, GeneralSecurityException {
+    public static void sendEmail(String text,String mail) throws MessagingException, GeneralSecurityException {
         //创建一个配置文件并保存
         Properties properties = new Properties();
 
@@ -50,10 +50,66 @@ public class SendMail {
         mimeMessage.setFrom(new InternetAddress("641572532@qq.com"));
 
         //邮件接收人
-        mimeMessage.setRecipient(Message.RecipientType.TO,new InternetAddress("984808743@qq.com"));
+        mimeMessage.setRecipient(Message.RecipientType.TO,new InternetAddress(mail));
 
         //邮件标题
         mimeMessage.setSubject("工作事宜");
+
+        //邮件内容
+        mimeMessage.setContent(text,"text/html;charset=UTF-8");
+
+        //发送邮件
+        transport.sendMessage(mimeMessage,mimeMessage.getAllRecipients());
+
+        //关闭连接
+        transport.close();
+    }
+
+    public static void sendEmailToMail(String text,String mail,String subject) throws MessagingException, GeneralSecurityException {
+        //创建一个配置文件并保存
+        Properties properties = new Properties();
+
+        properties.setProperty("mail.host","smtp.qq.com");
+
+        properties.setProperty("mail.transport.protocol","smtp");
+
+        properties.setProperty("mail.smtp.auth","true");
+
+
+        //QQ存在一个特性设置SSL加密
+        MailSSLSocketFactory sf = new MailSSLSocketFactory();
+        sf.setTrustAllHosts(true);
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.ssl.socketFactory", sf);
+
+        //创建一个session对象
+        Session session = Session.getDefaultInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("641572532@qq.com","mcglymaxiyesbajg");
+            }
+        });
+
+        //开启debug模式
+        session.setDebug(true);
+
+        //获取连接对象
+        Transport transport = session.getTransport();
+
+        //连接服务器
+        transport.connect("smtp.qq.com","641572532@qq.com","mcglymaxiyesbajg");
+
+        //创建邮件对象
+        MimeMessage mimeMessage = new MimeMessage(session);
+
+        //邮件发送人
+        mimeMessage.setFrom(new InternetAddress("641572532@qq.com"));
+
+        //邮件接收人
+        mimeMessage.setRecipient(Message.RecipientType.TO,new InternetAddress(mail));
+
+        //邮件标题
+        mimeMessage.setSubject(subject);
 
         //邮件内容
         mimeMessage.setContent(text,"text/html;charset=UTF-8");

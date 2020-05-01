@@ -1,9 +1,7 @@
 package com.shilei.tourist.service.impl;
 
 import com.shilei.tourist.dao.*;
-import com.shilei.tourist.entity.Address;
-import com.shilei.tourist.entity.EveryDayAvg;
-import com.shilei.tourist.entity.PersonNumber;
+import com.shilei.tourist.entity.*;
 import com.shilei.tourist.service.CountService;
 import com.shilei.tourist.utils.Camera;
 import com.shilei.tourist.utils.HolidayUtil;
@@ -41,6 +39,9 @@ public class CountServiceImpl implements CountService {
     @Autowired
     StaffDao staffDao;
 
+    @Autowired
+    WarningInfoDao warningInfoDao;
+
 
     @Override
     public PersonCountVO personCount() throws InterruptedException {
@@ -57,16 +58,35 @@ public class CountServiceImpl implements CountService {
     }
 
     @Override
-    public void savePersonNumber() throws InterruptedException {
+    public void savePersonNumber() {
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+        SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat hour = new SimpleDateFormat("HH");
+        Address address = addressDao.findAddressByName("测试1");
+        Staff staff = staffDao.findStaffByAddressAndState("测试1","在职");
         Integer personNumbers = body_num();
-        Camera camera = new Camera();
-        camera.main();
         PersonNumber personNumber = new PersonNumber();
         personNumber.setAddress("测试1");
         personNumber.setNumber(personNumbers);
+        if (personNumbers > address.getWarningNumber()){
+            WarningInfo warningInfo = new WarningInfo();
+            warningInfo.setNumber(personNumbers);
+            warningInfo.setAddress("测试1");
+            warningInfo.setDate(simple.format(date));
+            warningInfo.setDatetime(simpleDateFormat.format(date));
+            warningInfo.setWarningNumber(address.getWarningNumber());
+            warningInfo.setEmail(staff.getMail());
+            warningInfo.setPhone(staff.getPhone());
+            warningInfo.setName(staff.getName());
+            warningInfoDao.save(warningInfo);
+        }
         personNumber.setNowTime(new Date());
-        log.info("存储的人数和时间关系数据为{ }",personNumber);
+        personNumber.setDate(simple.format(date));
+        personNumber.setHour(hour.format(date));
+        log.info("person_number表新增数据为{}",personNumber);
         numberDao.save(personNumber);
+        numberDao.flush();
     }
 
     @Override

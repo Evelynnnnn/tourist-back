@@ -1,6 +1,7 @@
 package com.shilei.tourist.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.shilei.tourist.dao.StaffDao;
 import com.shilei.tourist.entity.Staff;
 import com.shilei.tourist.mail.SendMail;
@@ -9,8 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,11 +34,26 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void sendEmail(Map<String,String> map) {
+    public void sendEmail(Map<String,Object> map) {
         try {
-            SendMail.sendEmail(map.get("text"));
+            System.out.println(map.get("mail"));
+            String mail = String.valueOf(map.get("mail"));
+            SendMail.sendEmail(String.valueOf(map.get("text")),mail);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendAllEmail(String text) {
+        List<Staff> list = staffDao.findAllWithoutQuit();
+        List<String> mailList = list.stream().map(e -> e.getMail()).collect(Collectors.toList());
+        for (String mail:mailList) {
+            try {
+                SendMail.sendEmail(text,mail);
+            } catch ( Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

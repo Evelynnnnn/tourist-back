@@ -8,6 +8,8 @@ import com.shilei.tourist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.security.GeneralSecurityException;
 import java.util.Map;
 
 
@@ -24,9 +26,14 @@ public class UserController {
     @Autowired
     LoginRecordDao loginRecordDao;
 
-    @PostMapping("/login")
-    public Boolean countPerson(@RequestBody Account account)  {
-        return userService.checkUser(account);
+    @PostMapping("/confirm")
+    public void countPerson(@RequestBody Account account) throws GeneralSecurityException, MessagingException {
+        userService.checkUser(account);
+    }
+
+    @PostMapping("/loginCheck")
+    public Boolean loginCheck(@RequestBody Account account){
+        return userService.loginCheck(account);
     }
 
     @PostMapping("/userInfo")

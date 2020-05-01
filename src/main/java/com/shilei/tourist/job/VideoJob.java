@@ -14,10 +14,9 @@ import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
 @Slf4j
 public class VideoJob {
 
-    //todo 能否同时有两个启动类？
-    public static final String PUSS_ADDRESS = "rtmp://192.168.1.109:1935/live/home";
+    public static final String PUSS_ADDRESS = "rtmp://192.168.1.106:1935/live/home";
 
-    public void pushVideo() throws FrameGrabber.Exception, FrameRecorder.Exception, InterruptedException {
+    public static void pushVideo() throws FrameGrabber.Exception, FrameRecorder.Exception, InterruptedException {
         log.info("正在准备启动摄像头......");
         Loader.load(opencv_objdetect.class);
         FrameGrabber grabber = FrameGrabber.createDefault(0);//本机摄像头默认0，这里使用javacv的抓取器，至于使用的是ffmpeg还是opencv，请自行查看源码

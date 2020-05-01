@@ -10,7 +10,9 @@ public interface StaffService {
 
     List<Staff> findAllWithoutQuit();
 
-    void sendEmail(Map<String, String> map);
+    void sendEmail(Map<String, Object> map);
+
+    void sendAllEmail(String text);
 
     void addStaff(Map<String, Object> staff);
 

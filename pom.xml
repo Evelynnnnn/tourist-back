@@ -146,6 +146,15 @@
             <version>0.3.12</version>
         </dependency>
 
+        <dependency>
+            <groupId>local-sdk</groupId>
+            <artifactId>test</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/wx-1.0.jar</systemPath>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -153,8 +162,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
             </plugin>
         </plugins>
     </build>
+
 
 </project>
