@@ -45,7 +45,6 @@ public class StaffController {
 
     @PostMapping("/updateStaff")
     public void updateStaff(@RequestBody Map<String,Object> staff){
-        System.out.println(staff);
         staffService.updateStaff(staff);
     }
 

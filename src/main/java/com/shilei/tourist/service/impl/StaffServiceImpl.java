@@ -2,10 +2,13 @@ package com.shilei.tourist.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.shilei.tourist.dao.AccountDao;
 import com.shilei.tourist.dao.StaffDao;
+import com.shilei.tourist.entity.Account;
 import com.shilei.tourist.entity.Staff;
 import com.shilei.tourist.mail.SendMail;
 import com.shilei.tourist.service.StaffService;
+import com.shilei.tourist.utils.HanyuPinyinUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,9 @@ public class StaffServiceImpl implements StaffService {
 
     @Autowired
     StaffDao staffDao;
+
+    @Autowired
+    AccountDao accountDao;
 
     @Override
     public List<Staff> findAll() {
@@ -63,6 +69,7 @@ public class StaffServiceImpl implements StaffService {
         Map<String,Object> staff = (Map<String, Object>) staffs.get("staff");
         Staff saveStaff = JSON.parseObject(JSON.toJSONString(staff),Staff.class);
         saveStaff.setState("在职");
+        changePinYinAndSaveInAccount(saveStaff);
 //        saveStaff.setAddress(String.valueOf(staff.get("address")));
 //        saveStaff.setCity(String.valueOf(staff.get("city")));
 //        saveStaff.setName(String.valueOf(staff.get("name")));
@@ -73,6 +80,16 @@ public class StaffServiceImpl implements StaffService {
 //        saveStaff.setJob(String.valueOf(staff.get("job")));
         log.info("新增的人员信息为{}",saveStaff);
         staffDao.save(saveStaff);
+    }
+
+    public void changePinYinAndSaveInAccount(Staff staff){
+        HanyuPinyinUtil hanyuPinyinUtil = new HanyuPinyinUtil();
+        String pinyinName = hanyuPinyinUtil.toHanyuPinyin(staff.getName());
+        String email = staff.getMail();
+        Account account = new Account();
+        account.setMail(email);
+        account.setUsername(pinyinName);
+        accountDao.save(account);
     }
 
     @Override

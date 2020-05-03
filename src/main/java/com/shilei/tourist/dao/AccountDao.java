@@ -20,5 +20,4 @@ public interface AccountDao extends JpaRepository<Account,Integer> {
     void updateAccountCodeByUsername(String username,String code);
 
     Account findAccountByUsernameAndCode(String username,String code);
-
 }
