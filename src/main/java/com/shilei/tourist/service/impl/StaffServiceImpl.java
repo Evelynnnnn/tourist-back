@@ -97,6 +97,9 @@ public class StaffServiceImpl implements StaffService {
         Map<String,Object> staff = (Map<String, Object>) staffs.get("staff");
         Staff deleteStaff = JSON.parseObject(JSON.toJSONString(staff),Staff.class);
         staffDao.delete(deleteStaff);
+        HanyuPinyinUtil hanyuPinyinUtil = new HanyuPinyinUtil();
+        String pinyinName = hanyuPinyinUtil.toHanyuPinyin(deleteStaff.getName());
+        accountDao.deleteAccountByUsernameAndMail(pinyinName,deleteStaff.getMail());
     }
 
     @Override

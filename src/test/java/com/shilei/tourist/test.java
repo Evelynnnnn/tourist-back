@@ -58,4 +58,12 @@ public class test {
         in.close();
         out.close();
     }
+
+    @Test
+    void a(){
+        Map map = new HashMap();
+        map.put("a","a");
+        map.put("b","b");
+        System.out.println(map);
+    }
 }

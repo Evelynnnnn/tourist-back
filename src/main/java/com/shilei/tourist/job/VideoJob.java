@@ -14,7 +14,7 @@ import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
 @Slf4j
 public class VideoJob {
 
-    public static final String PUSS_ADDRESS = "rtmp://192.168.1.106:1935/live/home";
+    public static final String PUSS_ADDRESS = "rtmp://localhost:1935/live/home";
 
     public static void pushVideo() throws FrameGrabber.Exception, FrameRecorder.Exception, InterruptedException {
         log.info("正在准备启动摄像头......");

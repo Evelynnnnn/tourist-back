@@ -20,4 +20,9 @@ public interface AccountDao extends JpaRepository<Account,Integer> {
     void updateAccountCodeByUsername(String username,String code);
 
     Account findAccountByUsernameAndCode(String username,String code);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "delete from account where username = :username and mail = :mail")
+    void deleteAccountByUsernameAndMail(String username,String mail);
 }
