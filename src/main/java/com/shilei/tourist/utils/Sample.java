@@ -39,7 +39,7 @@ public class Sample{
 
         AipBodyAnalysis client = null;
         //准备url
-        String url = "https://aip.baidubce.com/rest/2.0/image-classify/v1/body_num";
+        String url = GetPropertiesUtil.getUrl("BaiduAPI");
         //选择请求方式
         HttpPost httppost = new HttpPost(url);
         //准备参数

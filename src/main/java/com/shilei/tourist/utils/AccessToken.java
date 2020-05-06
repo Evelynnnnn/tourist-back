@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 public class AccessToken {
+
+    public static void main(String[] args) {
+        String token = getAuth();
+        System.out.println(token);
+    }
     /**
      * 获取权限token
      * @return 返回示例：
@@ -20,9 +25,9 @@ public class AccessToken {
      */
     public static String getAuth() {
         // 官网获取的 API Key 更新为你注册的
-        String clientId = "OeYIuLiRUnWOtp1ez0dEWCow";
+        String clientId = GetPropertiesUtil.getUrl("clientId");
         // 官网获取的 Secret Key 更新为你注册的
-        String clientSecret = "vMV5yKXimxxAnuq1ROxknuwd2hUGAUd7";
+        String clientSecret = GetPropertiesUtil.getUrl("clientSecret");
         return getAuth(clientId, clientSecret);
     }
 
@@ -36,7 +41,7 @@ public class AccessToken {
      */
     public static String getAuth(String ak, String sk) {
         // 获取token地址
-        String authHost = "https://aip.baidubce.com/oauth/2.0/token?";
+        String authHost = GetPropertiesUtil.getUrl("authHost");
         String getAccessTokenUrl = authHost
                 // 1. grant_type为固定参数
                 + "grant_type=client_credentials"

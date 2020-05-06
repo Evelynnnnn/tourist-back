@@ -1,5 +1,6 @@
 package com.shilei.tourist.job;
 
+import com.shilei.tourist.utils.GetPropertiesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.ffmpeg.global.avcodec;
 import org.bytedeco.javacpp.Loader;
@@ -14,7 +15,11 @@ import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
 @Slf4j
 public class VideoJob {
 
-    public static final String PUSS_ADDRESS = "rtmp://localhost:1935/live/home";
+    public static void main(String[] args) throws FrameGrabber.Exception, InterruptedException, FrameRecorder.Exception {
+        pushVideo();
+    }
+
+    public static final String PUSS_ADDRESS = GetPropertiesUtil.getPushAddress();
 
     public static void pushVideo() throws FrameGrabber.Exception, FrameRecorder.Exception, InterruptedException {
         log.info("正在准备启动摄像头......");
