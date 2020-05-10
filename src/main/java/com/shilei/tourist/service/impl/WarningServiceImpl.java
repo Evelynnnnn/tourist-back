@@ -24,7 +24,7 @@ public class WarningServiceImpl implements WarningService {
     @Override
     public List<Map<String,String>> getTodayWarningInfoByAddress(String address) {
         if(address.isEmpty() || null == address){
-            address = "测试1";
+            address = "1号地点";
         }
         Date date = new Date();
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
@@ -46,7 +46,7 @@ public class WarningServiceImpl implements WarningService {
     @Override
     public List<String> getWarningLineY(String address) {
         if(address.isEmpty() || null == address){
-            address = "测试1";
+            address = "1号地点";
         }
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -57,7 +57,7 @@ public class WarningServiceImpl implements WarningService {
     @Override
     public List<String> getWarningLineX(String address) {
         if(address.isEmpty() || null == address){
-            address = "测试1";
+            address = "1号地点";
         }
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

@@ -16,7 +16,7 @@ public class TouristApplication {
 
     public static void main(String[] args) throws FrameGrabber.Exception, FrameRecorder.Exception, InterruptedException {
         SpringApplication.run(TouristApplication.class, args);
-        //pushVideo();
+        pushVideo();
     }
 
 }

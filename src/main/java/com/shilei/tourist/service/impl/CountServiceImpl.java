@@ -63,16 +63,16 @@ public class CountServiceImpl implements CountService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
         SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat hour = new SimpleDateFormat("HH");
-        Address address = addressDao.findAddressByName("测试1");
-        Staff staff = staffDao.findStaffByAddressAndState("测试1","在职");
+        Address address = addressDao.findAddressByName("1号地点");
+        Staff staff = staffDao.findStaffByAddressAndState("1号地点","在职");
         Integer personNumbers = body_num();
         PersonNumber personNumber = new PersonNumber();
-        personNumber.setAddress("测试1");
+        personNumber.setAddress("1号地点");
         personNumber.setNumber(personNumbers);
         if (personNumbers > address.getWarningNumber()){
             WarningInfo warningInfo = new WarningInfo();
             warningInfo.setNumber(personNumbers);
-            warningInfo.setAddress("测试1");
+            warningInfo.setAddress("1号地点");
             warningInfo.setDate(simple.format(date));
             warningInfo.setDatetime(simpleDateFormat.format(date));
             warningInfo.setWarningNumber(address.getWarningNumber());
@@ -131,15 +131,30 @@ public class CountServiceImpl implements CountService {
                 List<PersonNumber> numberList = numberDao.findAllByAddressAndDateOrderByNowTimeDesc(address,today);
                 tomorrowNumberVO.setNowNumber(numberList.get(0).getNumber());
                 tomorrowNumberVO.setTag(holiday);
+
+                List<Integer> list1 = everyDayAvgDao.findAllAvgNumberByAddress(address);
+                List<Double> doubleList1 = new ArrayList<>();
+                for (Integer a:list1) {
+                    double b = a;
+                    doubleList1.add(b);
+                }
+                List<Integer> list2= everyDayMaxDao.findAllMaxNumberByAddress(address);
+                List<Double> doubleList2 = new ArrayList<>();
+                for (Integer a:list2) {
+                    double b = a;
+                    doubleList2.add(b);
+                }
+                Double tomorrowTotal = getExpect(doubleList1,1,0.6);
+                Double tomorrowMax = getExpect(doubleList2,1,0.6);
                 if(holiday.equals("节日")){
-                    tomorrowNumberVO.setTomorrowMost(personNumber.getNumber()*3);
-                    tomorrowNumberVO.setTomorrowTotal(todayTotal*3);
+                    tomorrowNumberVO.setTomorrowMost(new Double(tomorrowMax*3).intValue());
+                    tomorrowNumberVO.setTomorrowTotal(new Double(tomorrowTotal*3).intValue());
                 }else if(holiday.equals("假日")){
-                    tomorrowNumberVO.setTomorrowMost(personNumber.getNumber()*2);
-                    tomorrowNumberVO.setTomorrowTotal(todayTotal*2);
+                    tomorrowNumberVO.setTomorrowMost(new Double(tomorrowMax*2).intValue());
+                    tomorrowNumberVO.setTomorrowTotal(new Double(tomorrowTotal*2).intValue());
                 }else {
-                    tomorrowNumberVO.setTomorrowMost(personNumber.getNumber());
-                    tomorrowNumberVO.setTomorrowTotal(todayTotal);
+                    tomorrowNumberVO.setTomorrowMost(new Double(tomorrowMax).intValue());
+                    tomorrowNumberVO.setTomorrowTotal(new Double(todayTotal).intValue());
                 }
                 tomorrowNumberVOList.add(tomorrowNumberVO);
             }
@@ -147,6 +162,22 @@ public class CountServiceImpl implements CountService {
 
 
         return tomorrowNumberVOList;
+    }
+
+    private static Double getExpect(List<Double> list, int year, Double modulus ) {
+        if (list.size() < 10 || modulus <= 0 || modulus >= 1) {
+            return null;
+        }
+        Double modulusLeft = 1 - modulus;
+        Double lastIndex = list.get(0);
+        Double lastSecIndex = list.get(0);
+        for (Double data :list) {
+            lastIndex = modulus * data + modulusLeft * lastIndex;
+            lastSecIndex = modulus * lastIndex + modulusLeft * lastSecIndex;
+        }
+        Double a = 2 * lastIndex - lastSecIndex;
+        Double b = (modulus / modulusLeft) * (lastIndex - lastSecIndex);
+        return a + b * year;
     }
 
     @Override

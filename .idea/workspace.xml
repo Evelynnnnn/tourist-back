@@ -2,16 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="21d55305-c86d-4c05-a47e-22f56df8307c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/utils/GetPropertiesUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/property/Urls.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/shilei/tourist/huigui.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/job/VideoJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/job/VideoJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/utils/AccessToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/utils/AccessToken.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/utils/HolidayUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/utils/HolidayUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/utils/Sample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/utils/Sample.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/shilei/tourist/utils/AccessToken.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/shilei/tourist/utils/AccessToken.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/shilei/tourist/utils/HolidayUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/shilei/tourist/utils/HolidayUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/shilei/tourist/utils/Sample.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/shilei/tourist/utils/Sample.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/TouristApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/TouristApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/dao/EveryDayAvgDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/dao/EveryDayAvgDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/dao/EveryDayMaxDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/dao/EveryDayMaxDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/mail/SendMail.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/mail/SendMail.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/service/impl/CountServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/service/impl/CountServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/service/impl/StaffServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/service/impl/StaffServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/service/impl/WarningServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shilei/tourist/service/impl/WarningServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/property/Urls.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/property/Urls.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/shilei/tourist/job/SaveWeather.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/shilei/tourist/job/SaveWeather.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/shilei/tourist/mail/SendMail$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/shilei/tourist/mail/SendMail$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/shilei/tourist/mail/SendMail.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/shilei/tourist/mail/SendMail.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/shilei/tourist/service/impl/CountServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/shilei/tourist/service/impl/CountServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/shilei/tourist/service/impl/StaffServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/shilei/tourist/service/impl/StaffServiceImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +34,23 @@
     <option name="HIDDEN_KINDS">
       <set />
     </option>
-    <expand />
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="tourist@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="tourist@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="tourist@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="tourist: schema" type="76f4a085:MysqlImplModel$Schema" />
+      </path>
+    </expand>
     <select />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -92,7 +113,7 @@
       <recent name="E:\Back\tourist\src\main\java\com\shilei\tourist" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.SaveWeather">
+  <component name="RunManager" selected="Spring Boot.TouristApplication">
     <configuration name="AccessToken" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.shilei.tourist.utils.AccessToken" />
       <module name="tourist" />
@@ -145,12 +166,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="VideoJob" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.shilei.tourist.job.VideoJob" />
+    <configuration name="huigui" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.shilei.tourist.huigui" />
       <module name="tourist" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.shilei.tourist.job.*" />
+          <option name="PATTERN" value="com.shilei.tourist.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -168,20 +189,20 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.VideoJob" />
       <item itemvalue="Application.HolidayUtil" />
       <item itemvalue="Application.Sample" />
       <item itemvalue="Application.AccessToken" />
       <item itemvalue="Application.SaveWeather" />
+      <item itemvalue="Application.huigui" />
       <item itemvalue="Spring Boot.TouristApplication" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.huigui" />
         <item itemvalue="Application.SaveWeather" />
         <item itemvalue="Application.AccessToken" />
         <item itemvalue="Application.Sample" />
         <item itemvalue="Application.HolidayUtil" />
-        <item itemvalue="Application.VideoJob" />
       </list>
     </recent_temporary>
   </component>
@@ -222,6 +243,9 @@
       <workItem from="1588435045223" duration="474000" />
       <workItem from="1588492692169" duration="17228000" />
       <workItem from="1588782387791" duration="3449000" />
+      <workItem from="1588785908008" duration="78000" />
+      <workItem from="1589024770045" duration="7576000" />
+      <workItem from="1589095938285" duration="5926000" />
     </task>
     <task id="LOCAL-00001" summary="2020-04-23-NO.1-commit">
       <created>1587655639473</created>
@@ -272,7 +296,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588516264086</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="2020-05-02&#10;增加properties文件">
+      <created>1588785983624</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1588785983624</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -285,7 +316,8 @@
     <MESSAGE value="2020-04-27&#10;完成首页登录时间地点" />
     <MESSAGE value="2020-05-02&#10;完成全部功能（可能再增加账户管理功能）" />
     <MESSAGE value="2020-05-02&#10;完成全部功能" />
-    <option name="LAST_COMMIT_MESSAGE" value="2020-05-02&#10;完成全部功能" />
+    <MESSAGE value="2020-05-02&#10;增加properties文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="2020-05-02&#10;增加properties文件" />
   </component>
   <component name="WindowStateProjectService">
     <state x="361" y="74" key="#Assign_Data_Sources" timestamp="1587912792764">
@@ -308,10 +340,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="484" y="54" key="#wx-1.0-jar-with-dependencies.jar/0.0.1536.824@0.0.1536.824" timestamp="1587654858965" />
-    <state x="248" y="0" key="CommitChangelistDialog2" timestamp="1588516262884">
+    <state x="248" y="0" key="CommitChangelistDialog2" timestamp="1588785982421">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="248" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1588516262884" />
+    <state x="248" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1588785982421" />
     <state x="503" y="119" key="EnvironmentVariablesDialog" timestamp="1588066311895">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -320,38 +352,38 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="170" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1588070833063" />
-    <state width="1493" height="226" key="GridCell.Tab.0.bottom" timestamp="1588785892475">
+    <state width="1493" height="226" key="GridCell.Tab.0.bottom" timestamp="1589109715289">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="226" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1588785892475" />
-    <state width="1493" height="226" key="GridCell.Tab.0.center" timestamp="1588785892475">
+    <state width="1493" height="226" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1589109715289" />
+    <state width="1493" height="226" key="GridCell.Tab.0.center" timestamp="1589109715289">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="226" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1588785892475" />
-    <state width="1493" height="226" key="GridCell.Tab.0.left" timestamp="1588785892475">
+    <state width="1493" height="226" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1589109715289" />
+    <state width="1493" height="226" key="GridCell.Tab.0.left" timestamp="1589109715289">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="226" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1588785892475" />
-    <state width="1493" height="226" key="GridCell.Tab.0.right" timestamp="1588785892475">
+    <state width="1493" height="226" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1589109715289" />
+    <state width="1493" height="226" key="GridCell.Tab.0.right" timestamp="1589109715289">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="226" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1588785892475" />
-    <state width="1493" height="226" key="GridCell.Tab.1.bottom" timestamp="1588516531925">
+    <state width="1493" height="226" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1589109715289" />
+    <state width="1493" height="226" key="GridCell.Tab.1.bottom" timestamp="1589109715289">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="226" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1588516531925" />
-    <state width="1493" height="226" key="GridCell.Tab.1.center" timestamp="1588516531925">
+    <state width="1493" height="226" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1589109715289" />
+    <state width="1493" height="226" key="GridCell.Tab.1.center" timestamp="1589109715289">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="226" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1588516531925" />
-    <state width="1493" height="226" key="GridCell.Tab.1.left" timestamp="1588516531924">
+    <state width="1493" height="226" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1589109715289" />
+    <state width="1493" height="226" key="GridCell.Tab.1.left" timestamp="1589109715289">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="226" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1588516531924" />
-    <state width="1493" height="226" key="GridCell.Tab.1.right" timestamp="1588516531925">
+    <state width="1493" height="226" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1589109715289" />
+    <state width="1493" height="226" key="GridCell.Tab.1.right" timestamp="1589109715289">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="226" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1588516531925" />
+    <state width="1493" height="226" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1589109715289" />
     <state x="299" y="70" key="Maven.ArtifactSearchDialog" timestamp="1587654043856">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -372,10 +404,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="183" key="extract.method.dialog/0.0.1536.824@0.0.1536.824" timestamp="1588513547735" />
-    <state x="390" y="138" width="755" height="548" key="find.popup" timestamp="1588505802550">
+    <state x="390" y="138" width="755" height="548" key="find.popup" timestamp="1589107368117">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="390" y="138" width="755" height="548" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1588505802550" />
+    <state x="390" y="138" width="755" height="548" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1589107368117" />
     <state x="178" y="120" key="new project wizard" timestamp="1587992414297">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

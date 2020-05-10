@@ -14,4 +14,7 @@ public interface EveryDayMaxDao extends JpaRepository<EveryDayMax,Integer> {
 
     @Query(nativeQuery = true,value = "select everyday_max.number as max from everyday_max where everyday_max.date = :date and everyday_max.address = :address limit 1")
     String findMaxNumberByDateAndAddress(String date, String address);
+
+    @Query(nativeQuery = true,value = "select everyday_max.number as max from everyday_max where everyday_max.address = :address ")
+    List<Integer> findAllMaxNumberByAddress(String address);
 }

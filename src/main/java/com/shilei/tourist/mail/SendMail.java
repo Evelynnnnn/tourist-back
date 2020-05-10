@@ -1,5 +1,6 @@
 package com.shilei.tourist.mail;
 
+import com.shilei.tourist.utils.GetPropertiesUtil;
 import com.sun.mail.util.MailSSLSocketFactory;
 
 import javax.mail.*;
@@ -10,6 +11,11 @@ import java.util.Properties;
 
 public class SendMail {
     public static void sendEmail(String text,String mail) throws MessagingException, GeneralSecurityException {
+        
+        String publicMail = GetPropertiesUtil.getApi("publicMail");
+        
+        String authorizationCode = GetPropertiesUtil.getApi("authorizationCode");
+        
         //创建一个配置文件并保存
         Properties properties = new Properties();
 
@@ -30,7 +36,7 @@ public class SendMail {
         Session session = Session.getDefaultInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("641572532@qq.com","mcglymaxiyesbajg");
+                return new PasswordAuthentication(publicMail,authorizationCode);
             }
         });
 
@@ -41,13 +47,13 @@ public class SendMail {
         Transport transport = session.getTransport();
 
         //连接服务器
-        transport.connect("smtp.qq.com","641572532@qq.com","mcglymaxiyesbajg");
+        transport.connect("smtp.qq.com",publicMail,authorizationCode);
 
         //创建邮件对象
         MimeMessage mimeMessage = new MimeMessage(session);
 
         //邮件发送人
-        mimeMessage.setFrom(new InternetAddress("641572532@qq.com"));
+        mimeMessage.setFrom(new InternetAddress(publicMail));
 
         //邮件接收人
         mimeMessage.setRecipient(Message.RecipientType.TO,new InternetAddress(mail));
@@ -66,6 +72,10 @@ public class SendMail {
     }
 
     public static void sendEmailToMail(String text,String mail,String subject) throws MessagingException, GeneralSecurityException {
+        String publicMail = GetPropertiesUtil.getApi("publicMail");
+
+        String authorizationCode = GetPropertiesUtil.getApi("authorizationCode");
+
         //创建一个配置文件并保存
         Properties properties = new Properties();
 
@@ -86,7 +96,7 @@ public class SendMail {
         Session session = Session.getDefaultInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("641572532@qq.com","mcglymaxiyesbajg");
+                return new PasswordAuthentication(publicMail,authorizationCode);
             }
         });
 
@@ -97,13 +107,13 @@ public class SendMail {
         Transport transport = session.getTransport();
 
         //连接服务器
-        transport.connect("smtp.qq.com","641572532@qq.com","mcglymaxiyesbajg");
+        transport.connect("smtp.qq.com",publicMail,authorizationCode);
 
         //创建邮件对象
         MimeMessage mimeMessage = new MimeMessage(session);
 
         //邮件发送人
-        mimeMessage.setFrom(new InternetAddress("641572532@qq.com"));
+        mimeMessage.setFrom(new InternetAddress(publicMail));
 
         //邮件接收人
         mimeMessage.setRecipient(Message.RecipientType.TO,new InternetAddress(mail));

@@ -42,7 +42,6 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public void sendEmail(Map<String,Object> map) {
         try {
-            System.out.println(map.get("mail"));
             String mail = String.valueOf(map.get("mail"));
             SendMail.sendEmail(String.valueOf(map.get("text")),mail);
         } catch (Exception e) {

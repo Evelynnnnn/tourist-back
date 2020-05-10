@@ -14,4 +14,7 @@ public interface EveryDayAvgDao extends JpaRepository<EveryDayAvg,Integer> {
 
     @Query(nativeQuery = true,value = "select everyday_avg.number as avg from everyday_avg where everyday_avg.date = :date and everyday_avg.address = :address limit 1")
     String findAvgNumberByDateAndAddress(String address,String date);
+
+    @Query(nativeQuery = true,value = "select everyday_avg.number as avg from everyday_avg where everyday_avg.address = :address")
+    List<Integer> findAllAvgNumberByAddress(String address);
 }
