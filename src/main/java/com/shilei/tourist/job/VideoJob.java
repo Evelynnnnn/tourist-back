@@ -59,7 +59,7 @@ public class VideoJob {
                 while (true){
                     Thread.sleep(40);
                     if (!grabbedImage.isNull()){
-                        cvSaveImage("D://1.jpg",grabbedImage);
+                        cvSaveImage(GetPropertiesUtil.getApi("PictureSavePath"),grabbedImage);
                     }
                     break;
                 }

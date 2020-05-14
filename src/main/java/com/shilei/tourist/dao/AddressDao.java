@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface AddressDao extends JpaRepository<Address,Integer> {
 
-    Address findByPictureId(int id);
-
     List<Address> findAll();
 
     @Query(nativeQuery = true,value = "select a.name from address a")

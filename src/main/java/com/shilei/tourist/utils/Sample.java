@@ -63,10 +63,9 @@ public class Sample{
             HttpResponse respones=httpclient.execute(httppost);
             //取出接口响应数据,并转成字符串
             String result=  EntityUtils.toString(respones.getEntity());
-            System.out.println(result);
             JSONObject jsonObject = JSONObject.parseObject(result);
             String jpg = String.valueOf(jsonObject.get("image"));
-            GenerateImage(jpg,"D://count//1.jpg");
+            GenerateImage(jpg,GetPropertiesUtil.getApi("ApiLoadPicture"));
             p = (int) jsonObject.get("person_num");
         } catch (Exception e) {
             e.printStackTrace();

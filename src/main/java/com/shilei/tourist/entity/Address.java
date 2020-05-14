@@ -16,15 +16,6 @@ public class Address {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "picture_id")
-    private int   pictureId;
-
-    @Column(name = "picture_path")
-    private String picturePath;
-
-    @Column(name = "now_time")
-    private String nowTime;
-
     @Column(name = "person_num")
     private String personNum;
 

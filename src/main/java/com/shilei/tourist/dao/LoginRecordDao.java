@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface LoginRecordDao extends JpaRepository<LoginRecord,Integer> {
 
-    List<LoginRecord> findAll();
+    @Query(nativeQuery = true,value = "select * from login_record order by login_time desc")
+    List<LoginRecord> findLoginRecordsOrderByLoginTimeDesc();
 
     @Query(nativeQuery = true,value = "select login_time from login_record where username = :username order by login_time DESC limit 1")
     String findLastLoginTimeByUsername(String username);

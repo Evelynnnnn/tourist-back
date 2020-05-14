@@ -43,7 +43,7 @@ public class LoginRecordServiceImpl implements LoginRecordService {
 
     @Override
     public JSONObject findLoginRecord() {
-        List<LoginRecord> loginRecordList = loginRecordDao.findAll();
+        List<LoginRecord> loginRecordList = loginRecordDao.findLoginRecordsOrderByLoginTimeDesc();
         JSONObject records = new JSONObject();
         records.put("list",loginRecordList);
         records.put("pageTotal",loginRecordList.size());

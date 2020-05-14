@@ -61,9 +61,8 @@ public class test {
 
     @Test
     void a(){
-        Map map = new HashMap();
-        map.put("a","a");
-        map.put("b","b");
-        System.out.println(map);
+        int a = 122;
+        char b = (char) a;
+        System.out.println(b);
     }
 }

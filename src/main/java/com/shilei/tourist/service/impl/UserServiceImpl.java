@@ -34,8 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean loginCheck(Account account) {
-        System.out.println("------------"+account);
-        if (!account.getCode().isEmpty() || !account.getUsername().isEmpty()){
+        if (!account.getCode().isEmpty() && !account.getUsername().isEmpty()){
             Account find = accountDao.findAccountByUsernameAndCode(account.getUsername(),account.getCode());
             if (find != null){
                 return true;
@@ -47,8 +46,10 @@ public class UserServiceImpl implements UserService {
     public String generateConfirmCode(){
         String code = "";
         for (int i = 0; i < 6; i++) {
+            int min = 97;
+            int max = 122;
             Random random = new Random();//指定种子数字
-            code += String.valueOf(random.nextInt(10));
+            code += String.valueOf((char)(random.nextInt(max)%(max-min+1) + min));
         }
         return code;
     }

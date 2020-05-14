@@ -64,26 +64,17 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void addStaff(Map<String,Object> staffs) {
-        //what the fuck simple!
         Map<String,Object> staff = (Map<String, Object>) staffs.get("staff");
         Staff saveStaff = JSON.parseObject(JSON.toJSONString(staff),Staff.class);
         saveStaff.setState("在职");
         changePinYinAndSaveInAccount(saveStaff);
-//        saveStaff.setAddress(String.valueOf(staff.get("address")));
-//        saveStaff.setCity(String.valueOf(staff.get("city")));
-//        saveStaff.setName(String.valueOf(staff.get("name")));
-//        saveStaff.setEntryDate(String.valueOf(staff.get("entryDate")));
-//        saveStaff.setProvince(String.valueOf(staff.get("province")));
-//        saveStaff.setMail(String.valueOf(staff.get("mail")));
-//        saveStaff.setPhone(String.valueOf(staff.get("phone")));
-//        saveStaff.setJob(String.valueOf(staff.get("job")));
         log.info("新增的人员信息为{}",saveStaff);
         staffDao.save(saveStaff);
     }
 
     public void changePinYinAndSaveInAccount(Staff staff){
         HanyuPinyinUtil hanyuPinyinUtil = new HanyuPinyinUtil();
-        String pinyinName = hanyuPinyinUtil.toHanyuPinyin(staff.getName());
+        String pinyinName = hanyuPinyinUtil.toHanyuPinyin(staff.getName()) + staff.getPhone().substring(staff.getPhone().length()-4);
         String email = staff.getMail();
         Account account = new Account();
         account.setMail(email);
@@ -97,7 +88,7 @@ public class StaffServiceImpl implements StaffService {
         Staff deleteStaff = JSON.parseObject(JSON.toJSONString(staff),Staff.class);
         staffDao.delete(deleteStaff);
         HanyuPinyinUtil hanyuPinyinUtil = new HanyuPinyinUtil();
-        String pinyinName = hanyuPinyinUtil.toHanyuPinyin(deleteStaff.getName());
+        String pinyinName = hanyuPinyinUtil.toHanyuPinyin(deleteStaff.getName())+deleteStaff.getPhone().substring(deleteStaff.getPhone().length()-4);
         accountDao.deleteAccountByUsernameAndMail(pinyinName,deleteStaff.getMail());
     }
 
