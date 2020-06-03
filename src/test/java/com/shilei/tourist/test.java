@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class test {
     @Test
@@ -65,4 +66,5 @@ public class test {
         char b = (char) a;
         System.out.println(b);
     }
+
 }

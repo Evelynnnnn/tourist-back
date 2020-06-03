@@ -479,6 +479,7 @@ public class CountServiceImpl implements CountService {
             if (moreDayCountDTO.getStartDate().compareTo(moreDayCountDTO.getEndDate()) <= 0) {
                 //现在打印中的日期
                 Calendar currentPrintDay = startDay;
+                list.add(moreDayCountDTO.getStartDate());
                 while (true) {
                     // 日期加一
                     currentPrintDay.add(Calendar.DATE, 1);
@@ -509,7 +510,7 @@ public class CountServiceImpl implements CountService {
         String now = numberDao.findNumberByAddressAndDate(address,simpleDateFormat.format(date));
         String name = staffDao.findStaffByAddress(address);
         HomeInfoGetVO homeInfoGetVO = new HomeInfoGetVO();
-        homeInfoGetVO.setAvg(avg == null ? 0 : Integer.parseInt(avg));
+        homeInfoGetVO.setAvg(avg == null ? 50 : Integer.parseInt(avg));
         homeInfoGetVO.setMax(max == null ? 0 : Integer.parseInt(max));
         homeInfoGetVO.setMin(min == null ? 0 : Integer.parseInt(min));
         homeInfoGetVO.setNow(now == null ? 0 : Integer.parseInt(now));

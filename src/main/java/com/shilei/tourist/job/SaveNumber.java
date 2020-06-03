@@ -12,7 +12,7 @@ public class SaveNumber {
     @Autowired
     CountService countService;
 
-    @Scheduled(cron = "0 0/2 8-20 * * ?")
+    @Scheduled(cron = "0 0/2 8-23 * * ?")
     void savePersonNumber() throws InterruptedException {
         countService.savePersonNumber();
     }

@@ -19,13 +19,14 @@ import java.util.*;
 @Slf4j
 @Component
 public class SaveWeather {
+
     @Autowired
     WeatherDao weatherDao;
 
     @Autowired
     TomorrowWeatherDao tomorrowWeatherDao;
 
-    @Scheduled(cron = "0 0 8 * * ?")
+    @Scheduled(cron = "0 0 21 * * ?")
     void saveWeather(){
         RequestModel model = new RequestModel();
         model.setGwUrl("https://way.jd.com/he/freeweather");
@@ -88,7 +89,7 @@ public class SaveWeather {
         weatherDao.save(weather);
     }
 
-    @Scheduled(cron = "0 0 8 * * ?")
+    @Scheduled(cron = "0 0 21 * * ?")
     void saveTomorrowWeather(){
         RequestModel model = new RequestModel();
         model.setGwUrl("https://way.jd.com/he/freeweather");
