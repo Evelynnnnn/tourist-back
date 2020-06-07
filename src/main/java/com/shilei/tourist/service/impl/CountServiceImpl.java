@@ -510,8 +510,8 @@ public class CountServiceImpl implements CountService {
         String now = numberDao.findNumberByAddressAndDate(address,simpleDateFormat.format(date));
         String name = staffDao.findStaffByAddress(address);
         HomeInfoGetVO homeInfoGetVO = new HomeInfoGetVO();
-        homeInfoGetVO.setAvg(avg == null ? 50 : Integer.parseInt(avg));
-        homeInfoGetVO.setMax(max == null ? 0 : Integer.parseInt(max));
+        homeInfoGetVO.setAvg(avg == null ? 10 : Integer.parseInt(avg));
+        homeInfoGetVO.setMax(max == null ? 30: Integer.parseInt(max));
         homeInfoGetVO.setMin(min == null ? 0 : Integer.parseInt(min));
         homeInfoGetVO.setNow(now == null ? 0 : Integer.parseInt(now));
         homeInfoGetVO.setStaff(name);

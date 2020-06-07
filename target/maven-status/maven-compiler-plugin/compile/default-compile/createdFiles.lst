@@ -46,7 +46,6 @@ com\shilei\tourist\service\CountService.class
 com\shilei\tourist\controller\CountController.class
 com\shilei\tourist\utils\IpUtil.class
 com\shilei\tourist\dao\WarningInfoDao.class
-com\shilei\tourist\dao\UserDao.class
 com\shilei\tourist\dao\AddressDao.class
 com\shilei\tourist\service\UserService.class
 com\shilei\tourist\utils\HttpsUtil.class

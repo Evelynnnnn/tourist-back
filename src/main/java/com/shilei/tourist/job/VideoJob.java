@@ -15,20 +15,16 @@ import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
 @Slf4j
 public class VideoJob {
 
-    public static void main(String[] args) throws FrameGrabber.Exception, InterruptedException, FrameRecorder.Exception {
-        pushVideo();
-    }
-
     public static final String PUSS_ADDRESS = GetPropertiesUtil.getPushAddress();
 
     public static void pushVideo() throws FrameGrabber.Exception, FrameRecorder.Exception, InterruptedException {
         log.info("正在准备启动摄像头......");
         Loader.load(opencv_objdetect.class);
-        FrameGrabber grabber = FrameGrabber.createDefault(0);//本机摄像头默认0，这里使用javacv的抓取器，至于使用的是ffmpeg还是opencv，请自行查看源码
+        FrameGrabber grabber = FrameGrabber.createDefault(0);//本机摄像头默认0，这里使用javacv的抓取器，使用的是ffmpeg
         grabber.start();//开启抓取器
 
         OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();//转换器
-        IplImage grabbedImage = converter.convert(grabber.grab());//抓取一帧视频并将其转换为图像，至于用这个图像用来做什么？加水印，人脸识别等等自行添加
+        IplImage grabbedImage = converter.convert(grabber.grab());//抓取一帧视频并将其转换为图像
 
         int width = grabbedImage.width();
         int height = grabbedImage.height();
@@ -44,7 +40,7 @@ public class VideoJob {
         CanvasFrame frame = new CanvasFrame("camera", CanvasFrame.getDefaultGamma() / grabber.getGamma());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setAlwaysOnTop(true);
-        Frame rotatedFrame=converter.convert(grabbedImage);//不知道为什么这里不做转换就不能推到rtmp
+        Frame rotatedFrame=converter.convert(grabbedImage);
         while (frame.isVisible() && (grabbedImage = converter.convert(grabber.grab())) != null) {
             rotatedFrame = converter.convert(grabbedImage);
             frame.showImage(rotatedFrame);

@@ -1,8 +1,10 @@
 E:\Back\tourist\src\main\java\com\shilei\tourist\service\StaffService.java
-E:\Back\tourist\src\main\java\com\shilei\tourist\dao\UserDao.java
+E:\Back\tourist\src\main\java\com\shilei\tourist\controller\CityController.java
+E:\Back\tourist\src\main\java\com\shilei\tourist\service\CityService.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\service\impl\WeatherServiceImpl.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\controller\VideoController.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\service\impl\CountServiceImpl.java
+E:\Back\tourist\src\main\java\com\shilei\tourist\utils\HanyuPinyinUtil.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\service\AddressService.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\dao\TomorrowWeatherDao.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\vo\TomorrowNumberVO.java
@@ -14,6 +16,8 @@ E:\Back\tourist\src\main\java\com\shilei\tourist\controller\UserController.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\dao\AddressDao.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\entity\LoginRecord.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\service\impl\WarningServiceImpl.java
+E:\Back\tourist\src\main\java\com\shilei\tourist\utils\GetPropertiesUtil.java
+E:\Back\tourist\src\main\java\com\shilei\tourist\entity\City.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\service\impl\AddressServiceImpl.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\service\CountService.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\entity\Weather.java
@@ -49,6 +53,7 @@ E:\Back\tourist\src\main\java\com\shilei\tourist\dao\EveryDayMaxDao.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\utils\FileUtil.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\service\WeatherService.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\service\impl\LoginRecordServiceImpl.java
+E:\Back\tourist\src\main\java\com\shilei\tourist\dao\CityDao.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\vo\MoreDayCountVO.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\dao\EveryDayAvgDao.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\dao\LoginRecordDao.java
@@ -61,5 +66,7 @@ E:\Back\tourist\src\main\java\com\shilei\tourist\utils\Camera.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\utils\HttpsUtil.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\vo\NumberWarningVO.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\vo\PersonCountVO.java
+E:\Back\tourist\src\main\java\com\shilei\tourist\dao\AccountDao.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\entity\Address.java
+E:\Back\tourist\src\main\java\com\shilei\tourist\service\impl\CityServiceImpl.java
 E:\Back\tourist\src\main\java\com\shilei\tourist\vo\MonthCountDTO.java
